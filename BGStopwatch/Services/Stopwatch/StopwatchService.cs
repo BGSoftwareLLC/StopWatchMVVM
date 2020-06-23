@@ -15,7 +15,11 @@ namespace BGStopwatch.Services.Stopwatch
         public void Start(TimeSpan interval, Func<bool> callback)
         {
             stopwatch.Start();
-            Device.StartTimer(TimeSpan.FromMilliseconds(100), callback);
+            Device.StartTimer(TimeSpan.FromMilliseconds(100), () =>
+            {
+                Device.BeginInvokeOnMainThread(() => { callback(); });
+                return true;
+            });
         }
 
         public void Stop()
